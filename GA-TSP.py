@@ -1,5 +1,7 @@
 import numpy as np, random, operator, pandas as pd, matplotlib.pyplot as plt
 map = {}
+
+
 class Data:
     # lay du lieu tu trong file
     def __init__(self, filename):
@@ -63,7 +65,7 @@ class GA:
         while i < eliteSize:
             rand = float(random.randrange(0, 10000)) / 100
             for n in percentFitness:
-                if percentFitness[n] < rand and percentFitness[n + 1] >= rand:
+                if percentFitness[n] < rand <= percentFitness[n + 1]:
                     if population[n] in list(eliteRoute.values()):
                         i = i
                     else:
@@ -94,9 +96,22 @@ class GA:
         children.append(self.crossover(eliteRoute[eliteSize - 1], eliteRoute[0]))
         return children
 
+    def mutate(self, children, mutationRate):
+        for i in range(len(children)):
+            if random.random() < mutationRate:
+                print ('Mutant!')
+                swapped = int(random.random() * len(children[i]))
+                swapWith = int(random.random() * len(children[i]))
+                gene1 = children[i][swapped]
+                gene2 = children[i][swapWith]
+                children[i][swapped] = gene2
+                children[i][swapWith] = gene1
+        return children
+
     def evaluation(self, currentGen, eliteSize, mutationRate):
         eliteRoute = self.selection(currentGen)
         crossChildren = self.crossoverPop(eliteRoute, eliteSize)
+        crossChildren = self.mutate(crossChildren, mutationRate)
         nextGeneration = currentGen
         fit = {}
         for i in range(len(nextGeneration)):
@@ -106,7 +121,7 @@ class GA:
             for j in range(len(nextGeneration)):
                 if fit[j] == worstfit:
                     nextGeneration[j] = crossChildren[i]
-                    fit[j] = fit[i]
+                    fit[j] = self.routeFitness(crossChildren[i])
         return nextGeneration
 
     def BestIndividual(self, population):
@@ -128,9 +143,9 @@ a = Data(filename)
 popSize = 100
 fitness = {}
 percentFitness = {}
-eliteSize = 25
+eliteSize = 50
 mutationRate = 0.001
-time = 100
+time = 300
 #########
 
 test = GA()
