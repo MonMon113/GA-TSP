@@ -116,14 +116,14 @@ class GA:
 				b = 1
 			if a != const:
 				b = a+1
-			parentID = self.Selection()			
+			parentID = self.Selection()
 			for i in population:
 				if parentID[a] == i:
 					# ConstRange = np.copy(population[i][0:cutRange])
 					for m in range(cutRange):
 						ConstRange.append(population[i][m-1])
 			child[a] = ConstRange
-			
+
 			#chep phan con lai cua parent 2 vao child 1
 			other = 0
 			while other < len(map):
@@ -146,7 +146,7 @@ class GA:
 			if check != 0:
 				a = a
 		return child
-	
+
 	def Mutation(self, child, fit):
 		if fit <= 0.001:
 			print ('Mutant!')
@@ -162,19 +162,6 @@ class GA:
 		r = 1
 		worstFitness = {}
 		while const >= r:
-			# # loai bo ca the bo me ngau nhien
-			# out = 0
-			# rand = int(random.randrange(1, len(population)))
-			# for n in worstFitness:
-			# 	if rand == worstFitness[n]:
-			# 		out = 1
-			# if out == 0:
-			# 	worstFitness[r] = rand
-			# 	r = r + 1
-			# if out == 1:
-			# 	r = r
-
-			# loai bo ca the bo me co fitness nho nhat, thay the bang ca the con
 			worstFitness[r] = 0
 			for i in range(len(fitness)):
 				out = 0
@@ -184,10 +171,10 @@ class GA:
 						if i == worstFitness[n]:
 							out = 1
 					if out == 0:
-						worstFitness[r] = i			
+						worstFitness[r] = i
 			r = r + 1
 		del fitness[0]
-		
+
 		r = 1
 		while const >= r:
 			population[worstFitness[r]] = child[r]
@@ -212,8 +199,8 @@ if __name__ == '__main__':
 	print ("File data: ")
 	# filename = raw_input ("")
 	filename = "kroA100.tsp"
-	a = Data (filename) 
-	
+	a = Data (filename)
+
 	i = 1
 	cutRange = 5
 	test = GA()
